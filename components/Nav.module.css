@@ -1,0 +1,50 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 16px;
+  transform: translateY(-120%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  background: light-dark(rgba(255, 255, 255, 0.78), rgba(20, 20, 20, 0.72));
+  backdrop-filter: blur(16px);
+  box-shadow: 0 1px 16px rgba(0, 0, 0, 0.12);
+}
+
+.navVisible {
+  transform: translateY(0);
+}
+
+.link {
+  padding: 10px 14px;
+  color: light-dark(#222, #fff);
+  font-weight: 650;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  background: transparent;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--mantine-color-brand-5);
+}
+
+.linkActive {
+  border-bottom-color: var(--mantine-color-brand-5);
+  color: var(--mantine-color-brand-5);
+}
+
+@media (max-width: 480px) {
+  .link {
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+}

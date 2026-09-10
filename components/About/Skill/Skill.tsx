@@ -4,9 +4,7 @@ import {
   Css,
   Javascript,
   Nodejs,
-  Python,
   Golang,
-  Ruby,
   Typescript,
 } from "./Icons";
 
@@ -16,7 +14,7 @@ export interface Props {
   color?: string;
 }
 
-const SocialNetwork: React.FC<Props> = ({ name, size = 40, color }) => {
+const Skill: React.FC<Props> = ({ name, size = 40, color }) => {
   switch (name) {
     case "Html":
       return <Html size={size} color={color} />;
@@ -28,15 +26,11 @@ const SocialNetwork: React.FC<Props> = ({ name, size = 40, color }) => {
       return <Typescript size={size} color={color} />;
     case "Nodejs":
       return <Nodejs size={size} color={color} />;
-    case "Python":
-      return <Python size={size} color={color} />;
     case "Golang":
       return <Golang size={size} color={color} />;
-    case "Ruby":
-      return <Ruby size={size} color={color} />;
     default:
-      return <div />;
+      return null;
   }
 };
 
-export default SocialNetwork;
+export default Skill;

@@ -1,27 +1,16 @@
-import {
-  Container,
-  Grid,
-  Text,
-  useMantineTheme,
-  Blockquote,
-} from "@mantine/core";
-import { Prism } from "@mantine/prism";
-import Image from "next/image";
-import styles from "./About.module.css";
-import Skill from "./Skill/Skill";
-import { IconCode } from "@tabler/icons";
-import { quotes } from "../../constants/quotes";
+"use client";
+
 import { useEffect, useState } from "react";
-import { useInView } from "../../hooks/useInView";
+import { Blockquote, Grid, Text, useComputedColorScheme } from "@mantine/core";
+import { CodeHighlight } from "@mantine/code-highlight";
+import { IconCode } from "@tabler/icons-react";
+import Image from "next/image";
+import { quotes } from "@/constants/quotes";
+import { Section } from "../Section";
+import Skill from "./Skill/Skill";
+import styles from "./About.module.css";
 
-import VsDark from "prism-react-renderer/themes/vsDark";
-import VsLight from "prism-react-renderer/themes/vsLight";
-import React from "react";
-
-import { motion, useAnimation } from "framer-motion";
-
-export interface Props {
-  id: string;
+type Props = {
   data: {
     title: string;
     location: string;
@@ -29,137 +18,74 @@ export interface Props {
     skills: string[];
     hobbies: string[];
   };
-  addSectionRef: (id: string, ref: React.MutableRefObject<any>) => void;
-  onVisibilityChange: (id: string, visible: boolean) => void;
-}
+};
 
-const About: React.FC<Props> = ({
-  id,
-  data: { title, location, description, skills, hobbies },
-  addSectionRef,
-  onVisibilityChange,
-}) => {
-  const theme = useMantineTheme();
-  const { ref, visible } = useInView();
-  const animationLeft = useAnimation();
-  const animationRight = useAnimation();
-
-  const demoCode = `
-{
-  "title": "${title}",
-  "location": "${location}",
-  "description": "${description}",
-  "hobbies": [
-    ${hobbies.map((hobby) => `"${hobby}"`).join(", ")}
-  ],
-}
-  `;
-
+export default function About({ data }: Props) {
+  const { title, location, description, skills, hobbies } = data;
+  const colorScheme = useComputedColorScheme("dark");
   const [quote, setQuote] = useState(quotes[0]);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
   }, []);
 
-  useEffect(() => {
-    if (ref.current) {
-      addSectionRef(id, ref);
-    }
-  }, [ref, addSectionRef, id]);
+  const demoCode = JSON.stringify(
+    { title, location, description, hobbies },
+    null,
+    2,
+  );
 
-  useEffect(() => {
-    onVisibilityChange(id, visible);
-  }, [visible, onVisibilityChange, id]);
-
-  useEffect(() => {
-    if (visible) {
-      animationLeft.start({
-        opacity: 1,
-        x: 0,
-        transition: {
-          ease: "easeOut",
-          duration: 0.5, // Control the speed of the animation
-        },
-      });
-      animationRight.start({
-        opacity: 1,
-        x: 0,
-        transition: {
-          ease: "easeOut",
-          duration: 0.5, // Control the speed of the animation
-        },
-      });
-    } else {
-      animationLeft.start({ opacity: 0, x: -200 });
-      animationRight.start({ opacity: 0, x: 200 });
-    }
-  }, [visible, animationLeft, animationRight]);
-
-  const renderSkills = () => {
-    return skills.map((skill, index) => (
-      <Grid.Col key={index} span={4} style={{ textAlign: "center" }}>
-        <Skill
-          name={skill}
-          color={theme.colorScheme === "dark" ? theme.white : theme.black}
-        />
-        <Text size="sm">{skill}</Text>
-      </Grid.Col>
-    ));
-  };
   return (
-    <Container size="xl" px="lg" className={styles.about} ref={ref}>
-      <Grid justify="center" align="center" className={styles.aboutContainer}>
-        <Grid.Col md={12} lg={3}>
-          <motion.div ref={ref} animate={animationLeft}>
-            <div className={styles.aboutImgCircle}>
-              <Image
-                src="/profilepic.jpg"
-                alt="Profile pic"
-                width={250}
-                height={250}
-                className="about-img"
-              />
-            </div>
-          </motion.div>
+    <Section id="about" title="About Me">
+      <Grid gutter="xl" className={styles.aboutGrid}>
+        <Grid.Col span={{ base: 12, md: 4 }}>
+          <div className={styles.photoWrap}>
+            <Image
+              src="/profilepic.jpg"
+              alt="Matt Wong"
+              width={220}
+              height={220}
+              className={styles.photo}
+            />
+          </div>
         </Grid.Col>
-        <Grid.Col md={12} lg={9}>
-          <motion.div ref={ref} animate={animationRight}>
-            <Grid
-              justify="center"
-              align="center"
-              className={styles.aboutHeading}
-            >
-              <h2>About Me</h2>
-            </Grid>
-            <Blockquote style={{ marginBottom: 20 }} cite={`- ${quote.cite}`}>
-              {quote.quote}
-            </Blockquote>
-            <Prism
-              language="json"
-              withLineNumbers
-              getPrismTheme={(_theme, _colorScheme) =>
-                theme.colorScheme === "dark" ? VsDark : VsLight
-              }
-            >
-              {demoCode}
-            </Prism>
-
-            <Grid
-              justify="center"
-              align="center"
-              className={styles.aboutSkillsHeading}
-            >
-              <Grid className={styles.aboutSkillsHeadingText}>
-                <IconCode size={24} className="headingIcon" />
-                <span>Code Skills</span>
-              </Grid>
-            </Grid>
-            <Grid gutter="xl">{renderSkills()}</Grid>
-          </motion.div>
+        <Grid.Col span={{ base: 12, md: 8 }}>
+          <Blockquote
+            className={styles.quote}
+            cite={`— ${quote.cite}`}
+            color="brand"
+          >
+            {quote.quote}
+          </Blockquote>
+          <CodeHighlight
+            className={styles.code}
+            code={demoCode}
+            language="json"
+            withCopyButton={false}
+          />
+          <div className={styles.skillsHeading}>
+            <IconCode size={22} />
+            <span>Code Skills</span>
+          </div>
+          <Grid gutter="lg">
+            {skills.map((skill) => (
+              <Grid.Col key={skill} span={4} className={styles.skill}>
+                <Skill
+                  name={skill}
+                  color={
+                    !mounted || colorScheme === "dark" ? "#ffffff" : "#111111"
+                  }
+                />
+                <Text size="sm" mt={6}>
+                  {skill}
+                </Text>
+              </Grid.Col>
+            ))}
+          </Grid>
         </Grid.Col>
       </Grid>
-    </Container>
+    </Section>
   );
-};
-
-export default About;
+}

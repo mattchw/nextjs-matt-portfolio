@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 import styles from "./BusinessCard.module.css";
 import SocialNetwork from "./SocialNetwork/SocialNetwork";
-import { IconMapPin, IconMail, IconUser } from "@tabler/icons";
+import { IconMapPin, IconMail, IconUser } from "@tabler/icons-react";
 
 export interface Props {
   name: string;
@@ -21,28 +21,21 @@ const BusinessCard: React.FC<Props> = ({
   email,
   networks,
 }) => {
-  const renderNetworks = () => {
-    if (networks) {
-      return networks.map(function (network) {
-        return (
-          <li key={network.name}>
-            <a href={network.url} target="_blank" rel="noreferrer">
-              <SocialNetwork name={network.name} size={24} />
-            </a>
-          </li>
-        );
-      });
-    }
-  };
   return (
     <div className={styles.card}>
       <div className={styles.additional}>
-        <div className={styles.cardConatiner}>
-          {/* <img src={logo} alt={styles.logo" style={{ width: 30 }} /> */}
-          <div className={styles.circle}>
-            <img src={image} alt={name} className={styles.circleImage} />
-          </div>
-
+        <div className={styles.cardContainer}>
+          {image ? (
+            <div className={styles.circle}>
+              <Image
+                src={image}
+                alt={name}
+                width={120}
+                height={120}
+                className={styles.circleImage}
+              />
+            </div>
+          ) : null}
           <div className={styles.cardName}>
             <IconUser size={20} />
             <span>{name}</span>
@@ -50,18 +43,30 @@ const BusinessCard: React.FC<Props> = ({
         </div>
       </div>
       <div className={styles.general}>
-        <div className={styles.cardConatiner}>
+        <div className={styles.cardContainer}>
           <div className={styles.location}>
             <IconMapPin size={20} />
             <p>{location}</p>
           </div>
-          <button className={styles.email}>
+          <a className={styles.email} href={`mailto:${email}`}>
             <IconMail size={20} />
             <span>{email}</span>
-          </button>
+          </a>
         </div>
-
-        <ul className={styles.socialLinks}>{renderNetworks()}</ul>
+        <ul className={styles.socialLinks}>
+          {networks?.map((network) => (
+            <li key={network.name}>
+              <a
+                href={network.url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={network.name}
+              >
+                <SocialNetwork name={network.name} size={24} />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

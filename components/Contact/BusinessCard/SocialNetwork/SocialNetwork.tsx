@@ -13,7 +13,7 @@ const SocialNetwork: React.FC<Props> = ({ name, size }) => {
     case "GitHub":
       return <GitHub size={size} />;
     default:
-      return <div />;
+      return null;
   }
 };
 

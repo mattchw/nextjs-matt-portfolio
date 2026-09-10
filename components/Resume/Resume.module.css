@@ -1,31 +1,23 @@
-.resume {
-  min-height: 100vh;
+.block {
+  padding: 2rem 0;
+}
+
+.sideTitle {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  padding-top: 100px;
-  padding-bottom: 100px;
-}
-
-.resumeContainer {
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-.resumeLeft {
-  margin: 0;
-}
-
-.resumeLeftTitle {
-  border-left: 3px solid #025f89;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 1rem;
   padding-left: 12px;
-  margin: 0;
+  border-left: 3px solid var(--mantine-color-brand-7);
+  font-weight: 650;
 }
 
-.resumeLeftTitleSM {
-  border-bottom: 3px solid #025f89;
-  padding-bottom: 4px;
-  margin: 0 auto;
-  justify-content: center;
+@media (max-width: 47.99em) {
+  .sideTitle {
+    border-left: none;
+    border-bottom: 3px solid var(--mantine-color-brand-7);
+    padding-left: 0;
+    padding-bottom: 6px;
+    justify-content: center;
+  }
 }

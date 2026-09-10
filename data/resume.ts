@@ -25,7 +25,7 @@ export const resume = {
         {
           title: "Software Engineer",
           startDate: "June 2022",
-          endDate: "Janurary 2023",
+          endDate: "January 2023",
           description: [
             "Implemented cart microservice using Go and gRPC focusing on filtering and applying merchants' promotions with Hong Kong and Taiwan teams",
             "Boosted the speed and performance of retrieving and filtering promotions of merchants by 90%, from 11s to 1s, and rolled out filtering feature to over 5,000 merchants",
